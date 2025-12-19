@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
 from pydantic import BaseModel
-from typing import List, Dict
+from typing import List, Dict, Any
 
 app = FastAPI()
 
@@ -72,7 +72,7 @@ class ResumeRequest(BaseModel):
     experience: str
     education: str
     awards: str
-    history: List[Dict] = []
+    history: List[Dict[str, Any]] = []
 
 @app.get("/")
 async def health_check():
@@ -80,7 +80,10 @@ async def health_check():
 
 @app.post("/chat")
 async def process_resume(req: ResumeRequest):
-    client = OpenAI(api_key=os.environ['DEEPSEEK_API_KEY'], base_url="https://api.deepseek.com")
+    api_key = os.environ.get('DEEPSEEK_API_KEY')
+    if not api_key:
+        return {"error": "DEEPSEEK_API_KEY is not configured"}
+    client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
     
     user_payload = f"""
     Desired Occupation: {req.occupation}
