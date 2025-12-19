@@ -1,7 +1,7 @@
 [project]
 name = "resume-editor-agent"
 version = "0.1.0"
-description = "This is a resume editor agent that uses the DeepSeek Reasoner model (using Deepseek's API) to edit and improve resumes."
+description = "This is a resume editor agent that uses the DeepSeek Reasoner model (using DeepSeek's API) to edit and improve a resume provided by the user. This resume aims to be ATS-friendly and uses the job description and the user's qualifications, to yield a resume."
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.125.0",
