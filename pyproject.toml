@@ -1,7 +1,7 @@
 [project]
-name = "repl-nix-workspace"
+name = "resume-editor-agent"
 version = "0.1.0"
-description = "Add your description here"
+description = "This is a resume editor agent that uses the DeepSeek Reasoner model (using Deepseek's API) to edit and improve resumes.""
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.125.0",
