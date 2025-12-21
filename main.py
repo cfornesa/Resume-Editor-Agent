@@ -1,12 +1,13 @@
 import os
+import gc
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from openai import OpenAI
 from pydantic import BaseModel
 from typing import List, Dict, Any
 
 app = FastAPI()
 
+# 1. KEEP CORS GLOBAL (Needed for the OPTIONS check)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
@@ -14,52 +15,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-GOALS = """
-You are a professional career assistant.
-Your role is to help job seekers tailor their resumes effectively to match job descriptions and to proofread resumes to be grammatically correct.
-Be empathetic, encouraging, and maintain a professional tone.
-"""
-
-ACTIONS = """
-Ensure that the responses are highly relevant to the job seeker's field of interest, emphasizing the skills, experiences, and qualifications that are most pertinent to the specific job description provided.
-Please modify the resume to:
-- Be ATS-friendly for the given target occupation and job description.
-- Reformat the new resume into a consistent format using Times New Roman font.
-- Use action verbs wherever possible and sensible.
-- Keep the new resume in a readable format that is within or under one-page long.
-"""
-
-INFORMATION = """
-Be mindful of any items in the memory and make sure that the logic follows in subsequent outputs.
-"""
-
-LANGUAGE = """
-Respond in this format:
-Name: <User's Name>
-Industry: <Industry>
-Occupation: <Desired Occupation>
-
-Here's your new resume (in markdown) based on the job description and your existing resume:
-# <Name in all caps>
-<Contact information>
----
-## Professional Summary
-<Professional summary>
----
-## Skills
-<Skills>
----
-## Experience
-<Professional experience>
----
-## Education
-<Education>
----
-## <Recognition or Awards or Certificates>
-<Recognition, awards, and/or certificates>
-"""
-
-SYSTEM_PROMPT = f"{GOALS}\n{ACTIONS}\n{INFORMATION}\n{LANGUAGE}"
+# 2. HEALTH CHECK (Already good, kept here)
+@app.get("/")
+async def health_check():
+    return {"status": "ok", "message": "DeepSeek Resume Agent API is running"}
 
 class ResumeRequest(BaseModel):
     occupation: str
@@ -74,17 +33,25 @@ class ResumeRequest(BaseModel):
     awards: str
     history: List[Dict[str, Any]] = []
 
-@app.get("/")
-async def health_check():
-    return {"status": "ok", "message": "DeepSeek Resume Agent API is running"}
+# 3. DEFER PROMPT CONSTRUCTION
+def get_resume_system_prompt():
+    GOALS = "..." # (Paste your full GOALS string here)
+    ACTIONS = "..." # (Paste your full ACTIONS string here)
+    INFORMATION = "..." # (Paste your full INFORMATION string here)
+    LANGUAGE = "..." # (Paste your full LANGUAGE string here)
+    return f"{GOALS}\n{ACTIONS}\n{INFORMATION}\n{LANGUAGE}"
 
 @app.post("/chat")
 async def process_resume(req: ResumeRequest):
+    # 4. DEFERRED OPENAI IMPORT
+    from openai import OpenAI
+
     api_key = os.environ.get('DEEPSEEK_API_KEY')
     if not api_key:
         return {"error": "DEEPSEEK_API_KEY is not configured"}
+
     client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
-    
+
     user_payload = f"""
     Desired Occupation: {req.occupation}
     Industry: {req.industry}
@@ -97,16 +64,26 @@ async def process_resume(req: ResumeRequest):
     Education: {req.education}
     Awards/Certificates: {req.awards}
     """
-    
-    messages = [{"role": "system", "content": SYSTEM_PROMPT}] + req.history
+
+    system_prompt = get_resume_system_prompt()
+    messages = [{"role": "system", "content": system_prompt}] + req.history
     messages.append({"role": "user", "content": user_payload})
-    
-    response = client.chat.completions.create(
-        model="deepseek-reasoner",
-        messages=messages
-    )
-    
-    return {"reply": response.choices[0].message.content}
+
+    try:
+        response = client.chat.completions.create(
+            model="deepseek-reasoner",
+            messages=messages
+        )
+
+        # 5. GARBAGE COLLECTION
+        res_content = response.choices[0].message.content
+        del messages
+        gc.collect()
+
+        return {"reply": res_content}
+    except Exception as e:
+        gc.collect()
+        return {"error": str(e)}
 
 if __name__ == "__main__":
     import uvicorn
