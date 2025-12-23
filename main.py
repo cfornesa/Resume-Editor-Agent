@@ -6,9 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict
 
-app = FastAPI(title="Political Behavior Agent")
+app = FastAPI(title="Tanaga Poetry Agent")
 
-# 1. CORS CONFIGURATION (Essential for Hostinger-Replit Handshake)
+# 1. CORS CONFIGURATION
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,7 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 2. PRIVACY SCRUBBER (Redacts PII to protect user identities in sensitive research)
+# 2. PRIVACY SCRUBBER
 def redact_pii(text: str) -> str:
     patterns = {
         "EMAIL": r'[\w\.-]+@[\w\.-]+\.\w+',
@@ -28,85 +28,64 @@ def redact_pii(text: str) -> str:
         text = re.sub(pattern, f"[{label}_REDACTED]", text, flags=re.IGNORECASE)
     return text
 
-# 3. INTEGRATED GAIL FRAMEWORK (Analytical & English-Anchored)
-def get_political_system_prompt():
+# 3. INTEGRATED GAIL FRAMEWORK (Syllabic & Rhyme Strictness)
+def get_tanaga_system_prompt():
     """
-    GOALS: Synthesize political science theory with behavioral data analysis.
+    GOALS: Generate authentic Filipino Tanagas (4 lines, 7 syllables each).
     ACTIONS: 
-        - Analyze queries through the lens of political psychology (e.g., bias, heuristic use).
-        - SCOPE GUARD: If the query is unrelated to politics or social science, state 
-          'I focus solely on political behavior' and pivot to a relevant concept.
+        - STRUCTURAL CHECK: Verify that each line has exactly 7 syllables.
+        - RHYME CHECK: Adhere to the traditional AAAA or AABB rhyme schemes.
     INFORMATION: 
-        - Utilize peer-reviewed frameworks and historical political case studies.
+        - Incorporate traditional 'Talinghaga' (metaphor) based on user themes.
     LANGUAGE: 
-        - STRICTURE: RESPOND IN ENGLISH ONLY.
-        - TONE: Academic, objective, and analytical.
+        - STRICTURE: RESPOND IN ENGLISH ONLY (unless Tagalog is requested for the poem).
+        - TONE: Poetic, rhythmic, and culturally respectful.
     """
     return (
-        "You are an Expert Political Behavior Consultant. YOU MUST RESPOND IN ENGLISH ONLY.\n\n"
+        "You are a Master of the Traditional Tanaga. YOU MUST RESPOND IN ENGLISH.\n\n"
         "GOALS:\n"
-        "Provide objective, data-driven analysis of political psychology and human behavior.\n\n"
+        "Compose a poem with 4 lines, 7 syllables per line, and a consistent rhyme scheme.\n\n"
         "ACTIONS:\n"
-        "1. ANALYTICAL DEPTH: When discussing political trends, reference psychological "
-        "mechanisms like 'In-group favoritism' or 'Cognitive dissonance'.\n"
-        "2. SCOPE CONTROL: For non-political/social science topics, state 'I focus solely on "
-        "political behavior' and pivot to a social science theory.\n\n"
+        "1. SYLLABLE COUNT: Before outputting, mentally verify each line is exactly 7 syllables.\n"
+        "2. THEME: Use the user's prompt to create deep metaphors (Talinghaga).\n\n"
         "INFORMATION:\n"
-        "Maintain strict neutrality. Do not advocate for specific parties; analyze the "
-        "BEHAVIOR and MOTIVATION behind political actors.\n\n"
+        "Respect the Filipino heritage of the form. Use [REDACTED] as a metaphor for silence.\n\n"
         "LANGUAGE:\n"
-        "Academic and precise. STRICTLY ENGLISH ONLY."
+        "Poetic and precise. STRICTLY ENGLISH FOR EXPLANATIONS."
     )
 
-class ChatRequest(BaseModel):
-    message: str
+class PoetryRequest(BaseModel):
+    theme: str
     history: List[Dict] = []
 
-# 4. HEALTH CHECK (Ensures the analytical safeguards are active)
+# 4. HEALTH CHECK
 @app.get("/")
 async def health():
-    return {
-        "status": "Political Behavior Agent Online",
-        "mode": "Neutrality-Protocol-Active",
-        "privacy": "Full-Scrub-Active"
-    }
+    return {"status": "Tanaga Agent Online", "mode": "Structural-Strictness-Active"}
 
 # 5. MAIN CHAT ENDPOINT
 @app.post("/chat")
-async def process_chat(request: ChatRequest):
+async def process_chat(request: PoetryRequest):
     from openai import OpenAI
+    safe_input = redact_pii(request.theme)
+    client = OpenAI(api_key=os.environ.get('DEEPSEEK_API_KEY'), base_url="https://api.deepseek.com")
 
-    # Redact input locally
-    safe_input = redact_pii(request.message)
-
-    api_key = os.environ.get('DEEPSEEK_API_KEY')
-    if not api_key:
-        return {"error": "DeepSeek API Key missing."}
-
-    client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
-
-    # Construct message chain
-    messages = [{"role": "system", "content": get_political_system_prompt()}] + request.history
+    messages = [{"role": "system", "content": get_tanaga_system_prompt()}] + request.history
     messages.append({"role": "user", "content": safe_input})
 
     try:
         response = client.chat.completions.create(
             model="deepseek-chat",
             messages=messages,
-            # Temperature 0.4 ensures high objective consistency
-            temperature=0.4
+            temperature=0.8 # Higher temperature for poetic creativity
         )
-
         reply = response.choices[0].message.content
-
-        # 6. MEMORY MANAGEMENT (GARBAGE COLLECTION)
         del messages, safe_input
         gc.collect()
-
         return {"reply": reply}
     except Exception as e:
         gc.collect()
-        return {"error": f"Analysis interrupted: {str(e)}"}
+        return {"error": str(e)}
 
 if __name__ == "__main__":
     import uvicorn
