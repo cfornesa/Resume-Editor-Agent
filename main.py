@@ -6,9 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict
 
-app = FastAPI(title="Resume Editor & Optimization Agent")
+app = FastAPI(title="Resume Editor Agent")
 
-# 1. CORS CONFIGURATION (Enables secure communication with your Hostinger frontend)
+# 1. CORS CONFIGURATION (Essential for Replit to Hostinger communication)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,7 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 2. PRIVACY SCRUBBER (PII, SSN, and Comprehensive Address Redaction)
+# 2. PRIVACY SCRUBBER (Redacts PII, SSNs, and Physical Addresses)
 def redact_pii(text: str) -> str:
     """
     Scrubs sensitive contact info before it leaves the Replit environment.
@@ -32,58 +32,80 @@ def redact_pii(text: str) -> str:
         text = re.sub(pattern, f"[{label}_REDACTED]", text, flags=re.IGNORECASE)
     return text
 
-# 3. INTEGRATED GAIL FRAMEWORK (With Anti-Inflationary Safeguards)
+# 3. INTEGRATED GAIL FRAMEWORK (Proportionality & Veracity Protocol)
 def get_resume_system_prompt():
     """
-    GOALS: Transform raw experience into high-impact, ATS-compatible professional prose.
+    GOALS: Tailor resumes for ATS compatibility while maintaining factual integrity.
     ACTIONS: 
-        - Apply 'Action-Oriented Veracity': Rephrase for impact without inventing facts.
-        - Utilize strong action verbs (e.g., 'Spearheaded', 'Optimized', 'Synthesized').
-        - Format for clarity and hierarchical flow.
+        - PROPORTIONAL DENSITY: Match the word length and detail level of the user's input.
+        - ACTION-ORIENTED VERACITY: Use strong verbs; use '[X]' for missing metrics.
+        - ANTI-HALLUCINATION: Do not invent roles, dates, or companies.
     INFORMATION: 
-        - SAFEGUARD: Strictly adhere to user-provided data. Do not invent roles, 
-          companies, or metrics. If a metric is missing, use '[X]%' or '[NUM]' as 
-          placeholders for the user to fill in manually.
-    LANGUAGE: Professional, executive, concise, and honest.
+        - Align content with the 'Target Job Description' provided by the user.
+        - Utilize the STAR (Situation, Task, Action, Result) method for bullet points.
+    LANGUAGE: 
+        - STRICTURE: RESPOND IN ENGLISH ONLY.
+        - TONE: Professional, executive, and authoritative.
     """
     return (
-        "You are an Expert Resume Strategist and Career Consultant.\n\n"
+        "You are an Expert Career Strategist. YOU MUST RESPOND IN ENGLISH ONLY.\n\n"
         "GOALS:\n"
-        "Enhance the clarity and impact of the user's resume while maintaining absolute factual integrity.\n\n"
-        "ACTIONS (ACTION-ORIENTED VERACITY PROTOCOL):\n"
-        "1. NO INFLATION: Do not hallucinate accomplishments. If the user says 'I helped with sales,' "
-        "rephrase to 'Collaborated with cross-functional teams to support sales initiatives.' "
-        "Do not change it to 'Increased sales by 50%.'\n"
-        "2. PLACEHOLDERS: If a result is provided without a metric, use a placeholder like '[Quantity]%' "
-        "or '[Amount]' to prompt the user for the real data.\n"
-        "3. ATS OPTIMIZATION: Use keywords relevant to the industry provided, but only if they "
-        "accurately reflect the existing content.\n\n"
-        "INFORMATION & LANGUAGE:\n"
-        "Focus on 'Show, Don't Just Tell.' Use high-level professional vocabulary. "
-        "If you encounter [REDACTED], leave it exactly as is to preserve the layout."
+        "Optimize the provided resume data for impact and ATS-readiness.\n\n"
+        "ACTIONS (PROPORTIONALITY & VERACITY):\n"
+        "1. LENGTH MATCHING: Maintain a similar volume of content to the input. Do not over-summarize.\n"
+        "2. NO HALLUCINATIONS: Never invent accomplishments. Use '[X]' to prompt for missing numbers.\n"
+        "3. STAR ALIGNMENT: Rephrase experience using the STAR method for maximum clarity.\n\n"
+        "INFORMATION:\n"
+        "Integrate keywords from the 'Target Job Description'. Respect [REDACTED] placeholders.\n\n"
+        "LANGUAGE:\n"
+        "Executive and punchy. Use Markdown headers for clear sectioning. STRICTLY ENGLISH ONLY."
     )
 
+# Updated Pydantic Model to match your HTML form fields
 class ResumeRequest(BaseModel):
-    content: str
-    target_industry: str = "General"
+    name: str
+    occupation: str
+    industry: str
+    contact: str
+    job_description: str
+    summary: str
+    skills: str
+    experience: str
+    education: str
+    awards: str
+    history: List[Dict] = []
 
-# 4. HEALTH CHECK (Ensures the privacy and veracity layers are active)
+# 4. HEALTH CHECK (Verifies server status and safety protocols)
 @app.get("/")
 async def health():
     return {
-        "status": "Resume Editor Agent Online", 
-        "privacy": "Strict-PII-Scrubbing",
-        "safeguard": "Anti-Inflationary-Veracity-Enabled"
+        "status": "Resume Agent Online", 
+        "mode": "Proportional-Veracity-Enabled",
+        "privacy": "Full-Scrub-Active"
     }
 
 # 5. MAIN EDITING ENDPOINT
-@app.post("/edit")
+@app.post("/chat")
 async def process_resume(request: ResumeRequest):
-    # DEFERRED IMPORT: Minimizes RAM footprint
+    # DEFERRED IMPORT: Minimizes RAM usage during idle time
     from openai import OpenAI
 
-    # Redact input locally to ensure contact info stays private
-    safe_input = redact_pii(request.content)
+    # Consolidate UI fields for processing
+    raw_content = f"""
+    Name: {request.name}
+    Occupation: {request.occupation}
+    Industry: {request.industry}
+    Contact: {request.contact}
+    Target JD: {request.job_description}
+    Summary: {request.summary}
+    Skills: {request.skills}
+    Experience: {request.experience}
+    Education: {request.education}
+    Awards: {request.awards}
+    """
+
+    # Redact input locally to protect user identities
+    safe_input = redact_pii(raw_content)
 
     api_key = os.environ.get('DEEPSEEK_API_KEY')
     if not api_key:
@@ -91,29 +113,33 @@ async def process_resume(request: ResumeRequest):
 
     client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
 
-    # Build the prompt for DeepSeek-V3 (optimized for professional prose)
+    # Construct message chain for DeepSeek-V3
     messages = [
         {"role": "system", "content": get_resume_system_prompt()},
-        {"role": "user", "content": f"Industry: {request.target_industry}\n\nResume Content:\n{safe_input}"}
+        {"role": "user", "content": f"Optimize the following resume data:\n{safe_input}"}
     ]
 
     try:
         response = client.chat.completions.create(
             model="deepseek-chat",
-            messages=messages
+            messages=messages,
+            # Low temperature ensures the agent sticks to the facts provided
+            temperature=0.3,
+            max_tokens=2000
         )
 
-        edited_text = response.choices[0].message.content
+        reply = response.choices[0].message.content
 
-        # 6. MEMORY MANAGEMENT
-        del messages, safe_input
+        # 6. MEMORY MANAGEMENT (GARBAGE COLLECTION)
+        del messages, safe_input, raw_content
         gc.collect()
 
-        return {"edited_resume": edited_text}
+        return {"reply": reply}
     except Exception as e:
         gc.collect()
-        return {"error": f"Resume optimization failed: {str(e)}"}
+        return {"error": f"Editing interrupted: {str(e)}"}
 
 if __name__ == "__main__":
     import uvicorn
+    # Optimized run for Replit
     uvicorn.run(app, host="0.0.0.0", port=5000)
