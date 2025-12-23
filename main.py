@@ -6,9 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict
 
-app = FastAPI(title="Resume Editor Agent")
+app = FastAPI(title="Political Behavior Agent")
 
-# 1. CORS CONFIGURATION (Essential for Replit to Hostinger communication)
+# 1. CORS CONFIGURATION (Essential for Hostinger-Replit Handshake)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,12 +16,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 2. PRIVACY SCRUBBER (Redacts PII, SSNs, and Physical Addresses)
+# 2. PRIVACY SCRUBBER (Redacts PII to protect user identities in sensitive research)
 def redact_pii(text: str) -> str:
-    """
-    Scrubs sensitive contact info before it leaves the Replit environment.
-    Essential for Resumes which naturally contain high-density PII.
-    """
     patterns = {
         "EMAIL": r'[\w\.-]+@[\w\.-]+\.\w+',
         "PHONE": r'\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}',
@@ -32,114 +28,86 @@ def redact_pii(text: str) -> str:
         text = re.sub(pattern, f"[{label}_REDACTED]", text, flags=re.IGNORECASE)
     return text
 
-# 3. INTEGRATED GAIL FRAMEWORK (Proportionality & Veracity Protocol)
-def get_resume_system_prompt():
+# 3. INTEGRATED GAIL FRAMEWORK (Analytical & English-Anchored)
+def get_political_system_prompt():
     """
-    GOALS: Tailor resumes for ATS compatibility while maintaining factual integrity.
+    GOALS: Synthesize political science theory with behavioral data analysis.
     ACTIONS: 
-        - PROPORTIONAL DENSITY: Match the word length and detail level of the user's input.
-        - ACTION-ORIENTED VERACITY: Use strong verbs; use '[X]' for missing metrics.
-        - ANTI-HALLUCINATION: Do not invent roles, dates, or companies.
+        - Analyze queries through the lens of political psychology (e.g., bias, heuristic use).
+        - SCOPE GUARD: If the query is unrelated to politics or social science, state 
+          'I focus solely on political behavior' and pivot to a relevant concept.
     INFORMATION: 
-        - Align content with the 'Target Job Description' provided by the user.
-        - Utilize the STAR (Situation, Task, Action, Result) method for bullet points.
+        - Utilize peer-reviewed frameworks and historical political case studies.
     LANGUAGE: 
         - STRICTURE: RESPOND IN ENGLISH ONLY.
-        - TONE: Professional, executive, and authoritative.
+        - TONE: Academic, objective, and analytical.
     """
     return (
-        "You are an Expert Career Strategist. YOU MUST RESPOND IN ENGLISH ONLY.\n\n"
+        "You are an Expert Political Behavior Consultant. YOU MUST RESPOND IN ENGLISH ONLY.\n\n"
         "GOALS:\n"
-        "Optimize the provided resume data for impact and ATS-readiness.\n\n"
-        "ACTIONS (PROPORTIONALITY & VERACITY):\n"
-        "1. LENGTH MATCHING: Maintain a similar volume of content to the input. Do not over-summarize.\n"
-        "2. NO HALLUCINATIONS: Never invent accomplishments. Use '[X]' to prompt for missing numbers.\n"
-        "3. STAR ALIGNMENT: Rephrase experience using the STAR method for maximum clarity.\n\n"
+        "Provide objective, data-driven analysis of political psychology and human behavior.\n\n"
+        "ACTIONS:\n"
+        "1. ANALYTICAL DEPTH: When discussing political trends, reference psychological "
+        "mechanisms like 'In-group favoritism' or 'Cognitive dissonance'.\n"
+        "2. SCOPE CONTROL: For non-political/social science topics, state 'I focus solely on "
+        "political behavior' and pivot to a social science theory.\n\n"
         "INFORMATION:\n"
-        "Integrate keywords from the 'Target Job Description'. Respect [REDACTED] placeholders.\n\n"
+        "Maintain strict neutrality. Do not advocate for specific parties; analyze the "
+        "BEHAVIOR and MOTIVATION behind political actors.\n\n"
         "LANGUAGE:\n"
-        "Executive and punchy. Use Markdown headers for clear sectioning. STRICTLY ENGLISH ONLY."
+        "Academic and precise. STRICTLY ENGLISH ONLY."
     )
 
-# Updated Pydantic Model to match your HTML form fields
-class ResumeRequest(BaseModel):
-    name: str
-    occupation: str
-    industry: str
-    contact: str
-    job_description: str
-    summary: str
-    skills: str
-    experience: str
-    education: str
-    awards: str
+class ChatRequest(BaseModel):
+    message: str
     history: List[Dict] = []
 
-# 4. HEALTH CHECK (Verifies server status and safety protocols)
+# 4. HEALTH CHECK (Ensures the analytical safeguards are active)
 @app.get("/")
 async def health():
     return {
-        "status": "Resume Agent Online", 
-        "mode": "Proportional-Veracity-Enabled",
+        "status": "Political Behavior Agent Online",
+        "mode": "Neutrality-Protocol-Active",
         "privacy": "Full-Scrub-Active"
     }
 
-# 5. MAIN EDITING ENDPOINT
+# 5. MAIN CHAT ENDPOINT
 @app.post("/chat")
-async def process_resume(request: ResumeRequest):
-    # DEFERRED IMPORT: Minimizes RAM usage during idle time
+async def process_chat(request: ChatRequest):
     from openai import OpenAI
 
-    # Consolidate UI fields for processing
-    raw_content = f"""
-    Name: {request.name}
-    Occupation: {request.occupation}
-    Industry: {request.industry}
-    Contact: {request.contact}
-    Target JD: {request.job_description}
-    Summary: {request.summary}
-    Skills: {request.skills}
-    Experience: {request.experience}
-    Education: {request.education}
-    Awards: {request.awards}
-    """
-
-    # Redact input locally to protect user identities
-    safe_input = redact_pii(raw_content)
+    # Redact input locally
+    safe_input = redact_pii(request.message)
 
     api_key = os.environ.get('DEEPSEEK_API_KEY')
     if not api_key:
-        return {"error": "DeepSeek API Key missing in Replit Secrets."}
+        return {"error": "DeepSeek API Key missing."}
 
     client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
 
-    # Construct message chain for DeepSeek-V3
-    messages = [
-        {"role": "system", "content": get_resume_system_prompt()},
-        {"role": "user", "content": f"Optimize the following resume data:\n{safe_input}"}
-    ]
+    # Construct message chain
+    messages = [{"role": "system", "content": get_political_system_prompt()}] + request.history
+    messages.append({"role": "user", "content": safe_input})
 
     try:
         response = client.chat.completions.create(
             model="deepseek-chat",
             messages=messages,
-            # Low temperature ensures the agent sticks to the facts provided
-            temperature=0.3,
-            max_tokens=2000
+            # Temperature 0.4 ensures high objective consistency
+            temperature=0.4
         )
 
         reply = response.choices[0].message.content
 
         # 6. MEMORY MANAGEMENT (GARBAGE COLLECTION)
-        del messages, safe_input, raw_content
+        del messages, safe_input
         gc.collect()
 
         return {"reply": reply}
     except Exception as e:
         gc.collect()
-        return {"error": f"Editing interrupted: {str(e)}"}
+        return {"error": f"Analysis interrupted: {str(e)}"}
 
 if __name__ == "__main__":
     import uvicorn
-    # Optimized run for Replit
     uvicorn.run(app, host="0.0.0.0", port=5000)
