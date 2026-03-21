@@ -1,11 +1,8 @@
 [project]
-name = "resume-editor-agent"
+name = "gail-resume-editor"
 version = "0.1.0"
-description = "This is a resume editor agent that uses the DeepSeek Reasoner model (using DeepSeek's API) to edit and improve a resume provided by the user. This resume aims to be ATS-friendly and uses the job description and the user's qualifications, to yield a resume."
-requires-python = ">=3.11"
 dependencies = [
-    "fastapi>=0.125.0",
-    "openai>=2.14.0",
-    "pydantic>=2.12.5",
-    "uvicorn>=0.38.0",
+    "flask>=3.0.0",
+    "openai>=2.0.0",
+    "pydantic>=2.0.0",
 ]
