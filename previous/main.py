@@ -15,6 +15,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict
+from flask_cors import CORS
+CORS(app)
 
 # INITIALIZATION: FastAPI handles high-concurrency async routing with minimal overhead.
 app = FastAPI(title="Resume & Career Engineer - Mistral Edition")
