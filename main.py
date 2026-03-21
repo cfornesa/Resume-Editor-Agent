@@ -1,10 +1,12 @@
 from flask import Flask, request, jsonify, render_template
 from model import build_resume, edit_resume
+from flask_cors import CORS
 import time
 import os
 
 # Instantiate Flask object
 app = Flask(__name__)
+CORS(app)
 
 # Serve frontend
 @app.route('/', methods=['GET'])
