@@ -19,3 +19,8 @@ venv/
 
 # Environment files
 .env
+
+# Node.js build/runtime artifacts
+node_modules/
+server.bundle.js
+data/rag-index.json

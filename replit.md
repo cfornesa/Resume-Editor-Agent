@@ -1,40 +1,27 @@
-# DeepSeek Resume Agent
+# Resume Editor Agent
 
 ## Overview
-A FastAPI-based API that uses DeepSeek's Reasoner model to help job seekers tailor their resumes to match job descriptions. The agent follows the GAIL framework (Goals, Actions, Information, Language) for structured responses.
+A Node.js and Express application for building and editing resumes with Mistral AI. The app keeps the current build/chat UX while adding a local PDF/DOCX RAG corpus for targeted context retrieval.
 
 ## Project Structure
-- `main.py` - Main FastAPI application with the /chat endpoint
-- `pyproject.toml` - Python dependencies managed by uv
+- `server.ts` - TypeScript entrypoint for Express
+- `src/` - server logic, Mistral helpers, and RAG utilities
+- `public/` - browser assets served statically
+- `documents/` - PDF/DOCX source files for local indexing
+- `data/` - on-disk index metadata
 
 ## API Endpoints
-- `GET /` - Health check endpoint
-- `POST /chat` - Resume processing endpoint
-
-### POST /chat Request Body
-```json
-{
-  "occupation": "Software Engineer",
-  "industry": "Technology",
-  "job_description": "Job posting text...",
-  "name": "John Doe",
-  "contact": "john@email.com | (555) 123-4567",
-  "summary": "Professional summary...",
-  "skills": "Python, JavaScript, etc.",
-  "experience": "Work history...",
-  "education": "Degree information...",
-  "awards": "Certifications and awards...",
-  "history": []
-}
-```
+- `GET /` - Serves the browser UI
+- `GET /health` - Health check endpoint
+- `POST /build` - Resume generation endpoint
+- `POST /chat` - Resume editing endpoint
+- `POST /api/rag/reindex` - Rebuilds the local document index
 
 ## Environment
-- Python 3.11
-- FastAPI with uvicorn
-- OpenAI Python SDK (configured for DeepSeek API)
-
-## Required Secrets
-- `DEEPSEEK_API_KEY` - API key from platform.deepseek.com
+- `NODE_ENV` - Development or production mode
+- `MISTRAL_API_KEY` - Mistral API key
+- `AGENT_ID` - Mistral agent identifier
+- `APP_URL` - Public application URL
 
 ## Deployment
-Configured for autoscale deployment on Replit.
+Configured for Node.js deployment on Hostinger with `npm run build` producing `server.bundle.js`.
