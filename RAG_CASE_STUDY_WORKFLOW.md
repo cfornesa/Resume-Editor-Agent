@@ -26,6 +26,8 @@ Required variables:
 npm run build
 ```
 
+Note: `esbuild` must stay in production dependencies so Hostinger can run this build step during deployment.
+
 ## 4) Generate embeddings and rebuild the index
 
 ```bash
