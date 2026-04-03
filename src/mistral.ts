@@ -1,8 +1,3 @@
-type ChatMessage = {
-  role: 'system' | 'user' | 'assistant';
-  content: string;
-};
-
 export type ConversationInput = {
   role: 'user' | 'assistant' | 'system';
   content: string;
@@ -80,47 +75,19 @@ function extractAssistantText(payload: unknown): string {
 }
 
 export async function runAgentConversation(agentId: string, inputs: ConversationInput[]): Promise<string> {
-  try {
-    const conversationResponse = await fetchJson<Record<string, unknown>>(`${MISTRAL_BASE_URL}/conversations`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${process.env.MISTRAL_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        agent_id: agentId,
-        inputs,
-      }),
-    });
-
-    const assistantText = stripFormatting(extractAssistantText(conversationResponse));
-    if (assistantText) {
-      return assistantText;
-    }
-  } catch {
-    // Fall back to the OpenAI-compatible chat API if the conversations endpoint is unavailable.
-  }
-
-  const messages: ChatMessage[] = inputs.map((input) => ({
-    role: input.role,
-    content: input.content,
-  }));
-
-  const chatResponse = await fetchJson<{ choices?: Array<{ message?: { content?: unknown } }> }>(`${MISTRAL_BASE_URL}/chat/completions`, {
+  const conversationResponse = await fetchJson<Record<string, unknown>>(`${MISTRAL_BASE_URL}/conversations`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${process.env.MISTRAL_API_KEY}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'mistral-medium-latest',
-      messages,
-      temperature: 0.2,
-      max_tokens: 1500,
+      agent_id: agentId,
+      inputs,
     }),
   });
 
-  return stripFormatting(normalizeContent(chatResponse.choices?.[0]?.message?.content));
+  return stripFormatting(extractAssistantText(conversationResponse));
 }
 
 export async function createEmbedding(text: string): Promise<number[]> {
