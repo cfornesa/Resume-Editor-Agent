@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Resume Guide</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface-variant": "#d2c5ab",
+                        "on-primary": "#3d2f00",
+                        "primary-fixed-dim": "#f1c100",
+                        "on-tertiary-fixed-variant": "#004f57",
+                        "inverse-on-surface": "#313030",
+                        "on-secondary-fixed-variant": "#474746",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "error-container": "#93000a",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-error-container": "#ffdad6",
+                        "primary": "#ffedc3",
+                        "secondary-container": "#474746",
+                        "tertiary-fixed-dim": "#00daf0",
+                        "error": "#ffb4ab",
+                        "tertiary": "#c6f7ff",
+                        "on-error": "#690005",
+                        "tertiary-container": "#00e7fe",
+                        "outline-variant": "#4e4632",
+                        "surface": "#131313",
+                        "surface-dim": "#131313",
+                        "on-primary-fixed": "#241a00",
+                        "tertiary-fixed": "#95f1ff",
+                        "primary-fixed": "#ffe08b",
+                        "surface-container": "#20201f",
+                        "inverse-primary": "#745b00",
+                        "on-primary-container": "#6f5700",
+                        "surface-container-highest": "#353535",
+                        "on-surface": "#e5e2e1",
+                        "outline": "#9a9078",
+                        "surface-container-high": "#2a2a2a",
+                        "on-tertiary-fixed": "#001f24",
+                        "primary-container": "#ffcc00",
+                        "on-background": "#e5e2e1",
+                        "on-tertiary": "#00363d",
+                        "on-secondary": "#303030",
+                        "surface-tint": "#f1c100",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary": "#c8c6c5",
+                        "on-secondary-container": "#b7b5b4",
+                        "inverse-surface": "#e5e2e1",
+                        "secondary-fixed": "#e4e2e1",
+                        "background": "#131313",
+                        "on-tertiary-container": "#00646e",
+                        "surface-variant": "#353535",
+                        "surface-bright": "#393939",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-primary-fixed-variant": "#584400"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["IBM Plex Sans", "sans-serif"],
+                        "body": ["IBM Plex Sans", "sans-serif"],
+                        "label": ["IBM Plex Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'IBM Plex Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel {
+            background: rgba(32, 32, 31, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation Anchor -->
+<header class="w-full top-0 sticky z-50 bg-[#131313] dark:bg-[#131313] bg-gradient-to-b from-[#131313] to-[#1a1a1a] shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
+<div class="flex justify-between items-center px-6 md:px-8 h-16 w-full max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#ffcc00]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h1 class="text-xl font-bold tracking-tighter text-[#ffcc00]">Resume Guide</h1>
+</div>
+<nav class="hidden md:flex gap-8 items-center font-medium tracking-tight">
+<a class="text-[#ffcc00] border-b-2 border-[#ffcc00] pb-1" href="#">Dashboard</a>
+<a class="text-[#d2c5ab] hover:text-[#ffcc00] transition-colors" href="#">Resume Builder</a>
+<a class="text-[#d2c5ab] hover:text-[#ffcc00] transition-colors" href="#">Mock Interview</a>
+<a class="text-[#d2c5ab] hover:text-[#ffcc00] transition-colors" href="#">Career Path</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-[#ffcc00]/10 transition-all text-[#d2c5ab] hover:text-[#ffcc00] active:scale-95" onclick="document.documentElement.classList.toggle('dark')">
+<span class="material-symbols-outlined">dark_mode</span>
+</button>
+<button class="p-2 rounded-full hover:bg-[#ffcc00]/10 transition-all text-[#d2c5ab] hover:text-[#ffcc00] active:scale-95">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-screen-xl mx-auto px-4 md:px-8 py-8 md:py-12">
+<!-- Hero Section / Welcome -->
+<section class="mb-12 text-center md:text-left" id="welcomeScreen">
+<h2 class="text-4xl md:text-6xl font-bold tracking-tight mb-4 bg-gradient-to-r from-primary-container to-on-surface-variant bg-clip-text text-transparent">
+                Welcome to the Resume Guide
+            </h2>
+<div class="space-y-4">
+<p class="text-on-surface-variant text-lg max-w-2xl">
+                    Fill in your professional details below and I'll build a complete, high-impact resume using the STAR method — with zero embellishment.
+                </p>
+<p class="text-on-surface-variant text-lg max-w-2xl">
+                    Once your resume is generated, you can fine-tune any section through conversation.
+                </p>
+<p class="text-on-surface-variant/60 text-xs uppercase tracking-widest">
+                    Powered by <a class="hover:text-primary-container transition-colors" href="https://mistral.ai/news/mistral-small-4" target="_blank">Mistral AI (Mistral Small 4)</a>.
+                </p>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Sidebar / Builder Form -->
+<aside class="lg:col-span-5 space-y-6">
+<div class="p-8 rounded-xl bg-surface-container-low shadow-xl border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-primary-container">edit_note</span>
+<h3 class="text-xs uppercase tracking-widest font-black text-primary-container">Resume Guide Strategist</h3>
+</div>
+<form class="space-y-6" id="buildForm">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="text-[10px] uppercase tracking-widest text-on-surface-variant">Full Name</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" id="fieldName" placeholder="Julian Vane" required="" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] uppercase tracking-widest text-on-surface-variant">Target Occupation</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" id="fieldOccupation" placeholder="Senior Architect" required="" type="text"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] uppercase tracking-widest text-on-surface-variant">Industry</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" id="fieldIndustry" placeholder="FinTech &amp; Automation" required="" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] uppercase tracking-widest text-on-surface-variant">Target Job Description</label>
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all resize-none" id="fieldJobDescription" placeholder="Paste the role details here for AI alignment..." required="" rows="2"></textarea>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] uppercase tracking-widest text-on-surface-variant">Professional Summary</label>
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all resize-none" id="fieldSummary" placeholder="Define your unique value proposition..." required="" rows="2"></textarea>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] uppercase tracking-widest text-on-surface-variant">Skills</label>
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all resize-none" id="fieldSkills" placeholder="Linguistic Analysis, Python, Strategic Ops" required="" rows="2"></textarea>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] uppercase tracking-widest text-on-surface-variant">Work Experience</label>
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all resize-none" id="fieldExperience" placeholder="List your key roles and impact..." required="" rows="3"></textarea>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="text-[10px] uppercase tracking-widest text-on-surface-variant">Education</label>
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all resize-none" id="fieldEducation" placeholder="Stanford University" required="" rows="2"></textarea>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] uppercase tracking-widest text-on-surface-variant">Awards &amp; Certifications</label>
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all resize-none" id="fieldAwards" placeholder="Employee of the Decade" required="" rows="2"></textarea>
+</div>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-primary-container to-[#6f5700] text-on-primary font-bold rounded-lg shadow-[0_0_20px_rgba(255,204,0,0.2)] hover:shadow-[0_0_30px_rgba(255,204,0,0.4)] hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2" id="buildButton" type="submit">
+<span class="material-symbols-outlined" id="buildIcon" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<div class="hidden animate-spin rounded-full h-5 w-5 border-2 border-on-primary border-t-transparent" id="buildSpinner"></div>
+                            Build Resume
+                        </button>
+</form>
+</div>
+</aside>
+<!-- Chat Interface -->
+<section class="lg:col-span-7 h-[870px] flex flex-col bg-surface-container rounded-xl shadow-2xl border border-outline-variant/10 overflow-hidden relative">
+<!-- Chat Header -->
+<div class="px-6 py-4 border-b border-outline-variant/10 flex justify-between items-center bg-surface-container-high/50">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary shadow-lg shadow-primary-container/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">forum</span>
+</div>
+<div>
+<p class="text-sm font-bold tracking-tight">Career Strategist</p>
+<p class="text-[10px] uppercase tracking-widest text-primary-container/80">Active Analysis</p>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-error transition-colors flex items-center gap-1 hidden" id="clearBtn">
+<span class="material-symbols-outlined text-sm">delete</span>
+<span class="text-[10px] uppercase tracking-widest">Start Over</span>
+</button>
+</div>
+<!-- Messages Container -->
+<div class="flex-1 overflow-y-auto p-6 space-y-8 no-scrollbar bg-gradient-to-b from-transparent to-surface-container-lowest/30" id="messagesContainer">
+<!-- Default Bot Message -->
+<div class="flex gap-4 max-w-[85%] animate-in fade-in duration-500">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-container-highest border border-primary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-primary-container">smart_toy</span>
+</div>
+<div class="space-y-1">
+<div class="px-5 py-3 rounded-2xl rounded-tl-none bg-surface-container-high text-on-surface leading-relaxed text-sm">
+                                Hello. I am your Resume Guide Strategist. Please fill out your profile details or paste a job description so we can begin the optimization process.
+                            </div>
+<span class="text-[9px] uppercase tracking-widest text-on-surface-variant pl-1">Strategist • Just Now</span>
+</div>
+</div>
+</div>
+<!-- Loading Indicator -->
+<div class="hidden absolute bottom-24 left-0 right-0 px-6 py-2" id="loadingIndicator">
+<div class="flex items-center gap-3 bg-surface-container-highest/80 backdrop-blur-md border border-primary-container/20 w-fit mx-auto px-4 py-2 rounded-full shadow-xl">
+<div class="flex gap-1">
+<div class="w-1.5 h-1.5 bg-primary-container rounded-full animate-bounce"></div>
+<div class="w-1.5 h-1.5 bg-primary-container rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+<div class="w-1.5 h-1.5 bg-primary-container rounded-full animate-bounce [animation-delay:-0.5s]"></div>
+</div>
+<span class="text-[10px] font-medium tracking-wide text-primary-container uppercase" id="loadingText">Career Strategist is thinking...</span>
+</div>
+</div>
+<!-- Chat Input -->
+<div class="p-6 bg-surface-container border-t border-outline-variant/10">
+<form class="relative group" id="chatForm">
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-2xl px-6 py-4 pr-16 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all resize-none shadow-inner no-scrollbar" id="messageInput" placeholder="Request an edit, e.g. 'Rewrite the summary'..." rows="1"></textarea>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-primary-container text-on-primary rounded-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary-container/20" id="sendButton" type="submit">
+<span class="material-symbols-outlined" id="sendIcon">send</span>
+<div class="hidden animate-spin rounded-full h-5 w-5 border-2 border-on-primary border-t-transparent" id="loadingSpinner"></div>
+</button>
+</form>
+<p class="text-center text-[9px] text-on-surface-variant mt-3 uppercase tracking-[0.2em] opacity-50">Secure Editorial Environment • Powered by Mistral AI</p>
+</div>
+</section>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 bg-[#131313] bg-gradient-to-t from-[#131313] to-[#1a1a1a] px-6 py-3 flex justify-between items-center border-t border-outline-variant/10 z-50">
+<button class="flex flex-col items-center gap-1 text-[#ffcc00]">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] uppercase tracking-widest">Dash</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#d2c5ab]">
+<span class="material-symbols-outlined">edit_square</span>
+<span class="text-[10px] uppercase tracking-widest">Builder</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#d2c5ab]">
+<span class="material-symbols-outlined">psychology</span>
+<span class="text-[10px] uppercase tracking-widest">AI Hub</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#d2c5ab]">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] uppercase tracking-widest">Profile</span>
+</button>
+</div>
+<!-- Hidden Messages End Anchor -->
+<div id="messagesEnd"></div>
+<script>
+        // Application State
+        let messages = [];
+        let isLoading = false;
+        let currentResume = null;
+        let chatHistory = [];
+
+        // DOM Elements
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const messagesContainer = document.getElementById('messagesContainer');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const messagesEnd = document.getElementById('messagesEnd');
+        const clearBtn = document.getElementById('clearBtn');
+
+        // Build Form (Phase 1)
+        const buildForm = document.getElementById('buildForm');
+        const buildButton = document.getElementById('buildButton');
+        const buildIcon = document.getElementById('buildIcon');
+        const buildSpinner = document.getElementById('buildSpinner');
+        const fieldName = document.getElementById('fieldName');
+        const fieldOccupation = document.getElementById('fieldOccupation');
+        const fieldIndustry = document.getElementById('fieldIndustry');
+        const fieldJobDescription = document.getElementById('fieldJobDescription');
+        const fieldSummary = document.getElementById('fieldSummary');
+        const fieldSkills = document.getElementById('fieldSkills');
+        const fieldExperience = document.getElementById('fieldExperience');
+        const fieldEducation = document.getElementById('fieldEducation');
+        const fieldAwards = document.getElementById('fieldAwards');
+
+        // Chat Form (Phase 2)
+        const chatForm = document.getElementById('chatForm');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const sendIcon = document.getElementById('sendIcon');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        function scrollToBottom() {
+            messagesEnd.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        const addMessage = (text, sender, phase = null) => {
+            const isBot = sender === 'bot';
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex gap-4 ${isBot ? 'max-w-[85%]' : 'max-w-[85%] ml-auto flex-row-reverse'} animate-in slide-in-from-bottom-2 duration-300`;
+            
+            const icon = isBot ? 'smart_toy' : 'person';
+            const iconClass = isBot ? 'text-primary-container' : 'text-on-primary-container';
+            const bgClass = isBot ? 'bg-surface-container-high' : 'bg-primary-container text-on-primary';
+            const label = isBot ? 'Career Strategist' : 'You';
+            const phaseBadge = phase ? `<span class="text-[8px] uppercase tracking-tighter bg-surface-container-highest px-1.5 py-0.5 rounded border border-outline-variant/20 ml-2">${phase === 'build' ? 'Built' : 'Edited'}</span>` : '';
+
+            messageDiv.innerHTML = `
+                <div class="flex-shrink-0 w-8 h-8 rounded-full ${isBot ? 'bg-surface-container-highest border border-primary-container/30' : 'bg-primary-container'} flex items-center justify-center">
+                    <span class="material-symbols-outlined text-sm ${iconClass}">${icon}</span>
+                </div>
+                <div class="space-y-1 ${!isBot ? 'text-right' : ''}">
+                    <div class="px-5 py-3 rounded-2xl ${isBot ? 'rounded-tl-none bg-surface-container-high' : 'rounded-tr-none ' + bgClass} text-on-surface leading-relaxed text-sm whitespace-pre-wrap">
+                        ${text}
+                    </div>
+                    <div class="flex items-center ${!isBot ? 'justify-end' : ''}">
+                        <span class="text-[9px] uppercase tracking-widest text-on-surface-variant pl-1">${label} • ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                        ${phaseBadge}
+                    </div>
+                </div>
+            `;
+            messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+        };
+
+        buildForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (isLoading) return;
+            
+            isLoading = true;
+            buildButton.disabled = true;
+            buildIcon.classList.add('hidden');
+            buildSpinner.classList.remove('hidden');
+            loadingIndicator.classList.remove('hidden');
+            
+            const name = fieldName.value.trim();
+            const occupation = fieldOccupation.value.trim();
+            
+            setTimeout(() => {
+                isLoading = false;
+                buildButton.disabled = false;
+                buildIcon.classList.remove('hidden');
+                buildSpinner.classList.add('hidden');
+                loadingIndicator.classList.add('hidden');
+                welcomeScreen.classList.add('hidden');
+                clearBtn.classList.remove('hidden');
+                
+                addMessage(`Building resume for ${name} — ${occupation}.`, 'user');
+                addMessage(`Resume built successfully using the STAR method. I have emphasized your impact and quantifiable results. How would you like to fine-tune the Professional Summary or Work Experience sections?`, 'bot', 'build');
+                
+                buildForm.classList.add('opacity-50', 'pointer-events-none');
+            }, 1500);
+        });
+
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const val = messageInput.value.trim();
+            if(!val || isLoading) return;
+
+            addMessage(val, 'user');
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+            
+            isLoading = true;
+            sendIcon.classList.add('hidden');
+            loadingSpinner.classList.remove('hidden');
+            loadingIndicator.classList.remove('hidden');
+
+            setTimeout(() => {
+                isLoading = false;
+                sendIcon.classList.remove('hidden');
+                loadingSpinner.classList.add('hidden');
+                loadingIndicator.classList.add('hidden');
+                addMessage("I've refined your bullet points to emphasize action verbs and quantifiable impact based on your request. The STAR formatting has been strictly maintained. Any other adjustments?", 'bot', 'edit');
+            }, 1000);
+        });
+
+        clearBtn.addEventListener('click', () => {
+            messagesContainer.innerHTML = '';
+            buildForm.reset();
+            buildForm.classList.remove('opacity-50', 'pointer-events-none');
+            welcomeScreen.classList.remove('hidden');
+            clearBtn.classList.add('hidden');
+            addMessage("Session reset. I am your Resume Guide Strategist. How can I help you build your high-impact resume today?", 'bot');
+        });
+
+        // Auto-expand textarea
+        messageInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (Math.min(this.scrollHeight, 128)) + 'px';
+        });
+    </script>
+</body></html>
